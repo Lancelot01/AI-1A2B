@@ -75,7 +75,7 @@ const $=id=>document.getElementById(id);
 let started=false, secret='', current='', round=0, history=[], bgmOn=true;
 const BEST_KEY='oneA2B_solo_mobile_best_v7';
 function digitLen(){return Number($('digitLen').value)}
-function valid(s){return new RegExp('^\d{'+digitLen()+'}$').test(s)&&new Set(s).size===digitLen()}
+function valid(s){return s.length===digitLen()&&/^[0-9]+$/.test(s)&&new Set(s).size===digitLen()}
 function generateSecret(){let a=['0','1','2','3','4','5','6','7','8','9'];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a.slice(0,digitLen()).join('')}
 function score(guess,target){let A=0,B=0;for(let i=0;i<guess.length;i++){if(guess[i]===target[i])A++;else if(target.includes(guess[i]))B++}return {A,B,str:`${A}A${B}B`}}
 function bestKey(){return BEST_KEY+'_'+digitLen()}
@@ -98,6 +98,6 @@ function closeModal(){$('modal').classList.remove('on')}
 function playBgmSoft(){const a=$('bgm');if(!a)return;a.volume=.45;if(bgmOn)a.play().catch(()=>{})}
 function toggleBgm(){const a=$('bgm');if(!a){msg('此版本沒有載入背景音樂。');return}bgmOn=!bgmOn;if(bgmOn){a.volume=.45;a.play().catch(()=>{});$('bgmBtn').textContent='♫'}else{a.pause();$('bgmBtn').textContent='♩'}}
 document.addEventListener('keydown',e=>{if(e.key>='0'&&e.key<='9')addDigit(e.key);else if(e.key==='Backspace')eraseDigit();else if(e.key==='Enter')submitGuess()});
-renderKeypad();renderDisplay();renderHistory();updateStats();
+renderKeypad();startGame();
 </script>
 </body></html>
